@@ -20,8 +20,9 @@ class JSONBodyParser: BodyParserProtocol {
     func parse(_ data: Data) -> ParsedBody? {
         guard let jsonObj = try? JSONSerialization.jsonObject(with: data, options: []),
             let json = jsonObj as? [String: Any] else {
-            return nil
-      }
-      return .json(json)
+                // instead of failing and returning nil, return raw data
+                return RawBodyParser().parse(data)
+        }
+        return .json(json)
     }
 }
